@@ -2,12 +2,6 @@
 
 This is an example of a very simplified insurance sales system made in a microservice architecture using Micronaut. 
 
-Available functionalities:
-* show products catalog
-* calculate price for product based on questions defined on product and tariff definition (with MVEL engine)
-* register new policy
-* ...
-
 ## Architecture overview
 
 <p align="center">
@@ -26,23 +20,45 @@ Available functionalities:
 * **web-vue** - frontend
 
 ## Building
-For demo purposes build process is automated by a shell script:
+This step requires **Java 8 (JDK), Maven** and **Yarn**.
+
+For demo purposes build process is automated by a shell script.
+For Unix-based systems:
+```
+build-without-tests.sh
+```
+For Windows:
+```
+build-without-tests.bat
+```
+
+If you already run the necessary infrastructure (Kafka, Consul etc.), you should run build with all tests:
+For Unix-based systems:
 ```
 build.sh
 ```
+For Windows:
+```
+build.bat
+```
 
-This step requires Java 8 (JDK), Maven and Yarn.
 
 ## Running
 
 Prerequisites:
-* docker
-* docker-compose
+* **docker**
+* **docker-compose**
+
+For Windows users, append below line ```C:\Windows\System32\drivers\etc\hosts```:
+```
+127.0.0.1 kafkaserver
+```
 
 ### Automated deployment
+
 To run the whole system on local machine just type:
 ```
-run.sh
+docker-run.sh
 ```
 This script will provision required infrastructure and start all services.
 Setup is powered by docker-compose and configured via `docker-compose.yml` file.
@@ -57,78 +73,40 @@ At this point system is ready to use: [http://localhost](http://localhost)
 
 ### Manual deployment
 
-If you want to run services manually (eg. from IDE), you have to provision infrastructure manually too:
+If you want to run services manually (eg. from IDE), you have to provision infrastructure with script from ````scripts``` folder:
+```
+infra-run.sh
+```
 
-#### Consul
+Afterwards you need to add kafka cluster - either via web UI ([Kafka Manager](http://localhost:9000/) -> Cluster -> Add Cluster)
+or using provided script:
+```
+kafka-create-cluster.sh
+```
+
+* Consul dashboard: ```http://localhost:8500```
+* Zipkin dashboard: ```http://localhost:9411/zipkin/```
+* Kafka Manager dashboard: ```http://localhost:9000/```
+
+#### Consul without our script
 ```
 docker run -p 8500:8500 consul
 ```
-Open dashboard:
-```
-http://localhost:8500
-```
-#### Zipkin
+#### Zipkin without our script
 ```
 docker run -d -p 9411:9411 openzipkin/zipkin
 ```
-Open dashboard:
-```
-http://localhost:9411/zipkin/
-```
-
-#### Kafka
+#### Kafka without our script
 Setup Kafka on Windows with [this instruction](https://zablo.net/blog/post/setup-apache-kafka-in-docker-on-windows).
-Folder [kafka-docker] contains the script copied from the above instruction.
-
-Open dashboard:
-```
-http://localhost:9000/
-```
 
 ## Add new microservice
 
 Create new microservice with [Micronaut CLI](http://guides.micronaut.io/micronaut-cli/guide/index.html):
 ```
-mn create-app pl.altkom.asc.lab.[SERVICE-NAME]-service -f spock -b maven
+mn create-app pl.altkom.asc.lab.[SERVICE-NAME]-service -b maven
 ```
 
-This command generate project with Spock test and Maven as build tool.
-
-## Examples
-
-Example JSON for `/policies` POST:
-```
-{
-	"policyVersion": {
-		"policyNumber": "P1",
-		"productCode": "ABO_GOLD",
-		"policyHolder": {
-			"firstName": "Jan",
-			"lastName": "Bak",
-			"pesel": "11111111116"
-		},
-		"accountNumber": "901291092012910",
-		"versionNumber": 1,
-		"covers": [{
-				"code": "C1",
-				"services": [{
-						"code": "S1",
-						"coPayment": {
-							"percent": 10,
-							"amount": null
-						},
-						"limit": {
-							"periodTypeCode": "POLICY_YEAR",
-							"maxQuantity": 10,
-							"maxAmount": null
-						}
-					}
-				]
-			}
-		]
-	}
-}
-```
+This command generate project in Java and Maven as build tool.
 
 ## Dashboard examples
 
@@ -142,7 +120,7 @@ Example JSON for `/policies` POST:
     <img alt="Kafka" src="https://raw.githubusercontent.com/asc-lab/micronaut-microservices-poc/master/readme-images/kafka.png" />
 </p>
 
-### Show services in Consul
+### Show registered services in Consul
 <p align="center">
     <img alt="Consul" src="https://raw.githubusercontent.com/asc-lab/micronaut-microservices-poc/master/readme-images/consul.png" />
 </p>

@@ -1,5 +1,6 @@
 package pl.altkom.asc.lab.micronaut.poc.gateway.client.v1;
 
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.Client;
@@ -12,18 +13,15 @@ import pl.altkom.asc.lab.micronaut.poc.policy.service.api.v1.commands.createpoli
 import pl.altkom.asc.lab.micronaut.poc.policy.service.api.v1.commands.terminatepolicy.TerminatePolicyCommand;
 import pl.altkom.asc.lab.micronaut.poc.policy.service.api.v1.commands.terminatepolicy.TerminatePolicyResult;
 import pl.altkom.asc.lab.micronaut.poc.policy.service.api.v1.queries.getpolicydetails.GetPolicyDetailsQueryResult;
-import pl.altkom.asc.lab.micronaut.poc.policy.service.api.v1.queries.findpolicy.FindPolicyQueryResult;
+
+import javax.validation.constraints.NotNull;
 
 @Client(id = "policy-service")
 @Retryable(attempts = "2", delay = "2s")
 public interface PolicyGatewayClient extends PolicyOperations {
 
     @Post("/offers")
-    CreateOfferResult createOffer(CreateOfferCommand cmd);
-
-    @Override
-    @Get("/policies")
-    FindPolicyQueryResult policies();
+    CreateOfferResult createOffer(@Body @NotNull CreateOfferCommand cmd);
 
     @Override
     @Get("/policies/{policyNumber}")

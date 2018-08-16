@@ -8,6 +8,8 @@
             <router-link to="/policies">Policies</router-link>
             |
             <router-link to="/about">About</router-link>
+            |
+            <router-link to="/account">Account</router-link>
         </div>
 
         <hr/>
@@ -15,6 +17,11 @@
         <div id="main-container">
             <router-view/>
         </div>
+
+        <footer>
+            <img src="./assets/logo_horizontal.png" alt="Logo Footer"/>
+            <p><a href="https://asc.altkom.pl">Altkom Software & Consulting LAB @ 2018</a></p>
+        </footer>
     </div>
 </template>
 
@@ -44,4 +51,26 @@
         width: 80%;
         margin: 0 auto;
     }
+
+    footer {
+        text-align: center;
+        border-top: 1px gray solid;
+        margin-left: 10em;
+        margin-right: 10em;
+        margin-top: 30px;
+    }
+
+    footer > img {
+        margin-top: 20px;
+        height: 60px;
+    }
+
+    footer > hr {
+        width: 90%;
+    }
+
+    footer > p > a {
+        color: black;
+    }
+
 </style>

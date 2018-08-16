@@ -1,12 +1,6 @@
 micronaut:
     application:
         name: policy-service
-    executors:
-        consumer:
-            type: fixed
-            nThreads: 2
----
-datasources.default: {}
 ---
 datasources:
   default:
@@ -19,7 +13,6 @@ jpa:
  default:
     packages-to-scan:
         - 'pl.altkom.asc.lab.micronaut.poc.policy.domain'
-        - 'pl.altkom.asc.lab.micronaut.poc.policy.readmodel'
     properties:
         hibernate:
             hbm2ddl:
@@ -32,6 +25,8 @@ jackson:
     writeDatesAsTimestamps: true
 ---
 kafka:
+#  embedded:
+#    enabled: true
   bootstrap:
     servers: "${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}"
 ---

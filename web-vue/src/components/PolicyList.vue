@@ -1,5 +1,9 @@
 <template>
-    <b-table striped hover :items="policies" :fields="fields"></b-table>
+    <b-table bordered striped hover
+             :items="policies"
+             :fields="fields"
+             @row-clicked="showDetails">
+    </b-table>
 </template>
 
 <script>
@@ -11,24 +15,9 @@
             return {
                 fields: [
                     {key: 'number'},
-                    {
-                        key: 'dateFrom',
-                        formatter: (value) => {
-                            if (!value)
-                                return "";
-                            return value[2] + "-" + value[1] + "-" + value[0];
-                        }
-                    },
-                    {
-                        key: 'dateTo',
-                        formatter: (value) => {
-                            if (!value)
-                                return "";
-                            return value[2] + "-" + value[1] + "-" + value[0];
-                        }
-                    },
+                    {key: 'dateFrom'},
+                    {key: 'dateTo'},
                     {key: 'policyHolder'}
-
                 ],
                 policies: []
             }
@@ -37,10 +26,11 @@
             HTTP.get('policies').then(response => {
                 this.policies = response.data.policies;
             });
+        },
+        methods: {
+            showDetails(record) {
+                this.$router.push({ name: 'policyDetails', params: { policyNumber: record.number }});
+            }
         }
     }
 </script>
-
-<style scoped>
-
-</style>
